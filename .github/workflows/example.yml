@@ -2,21 +2,53 @@ name: Tester et déployer
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "random" ]
     
   pull_request:
     branches: 
-      -"main" 
+      -"random" 
 
 jobs:
-  mon-premier-job:
+  mon-premier-job: # par exemple run test 
     runs-on: ubuntu-latest
     steps:
       - name: lister fichiers
-        run: ls -la
+        run: echo $NAME
+        env:
+          NAME : marco
+          
+      - name: lister fichiers 
+        run: ls -la 
         
       - name: cloner le répo
         uses: actions/checkout@v4 # checkout repo
         
       - name: lister fichiers
         run: ls -la
+        
+  test: # par exemple  : second-job
+    runs-on: ubuntu-latest
+    steps:
+      - name: lister fichiers
+        run: ls -la
+        
+      - name: cloner le répo
+        uses: actions/checkout@v4
+        
+      - name: installer python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+          
+      - name:  montrer la version de python installée
+        run: python --version
+
+      - name: installer les dépendances
+        run: |
+          pip install -r requirements.txt
+          pip install pytest
+        
+      - name: Lancer les tests
+        run: python -m pytest 
+        
+        
