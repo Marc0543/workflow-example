@@ -2,7 +2,7 @@ name: Tester et déployer
 
 on:
   push:
-    branches: [ "random_name" ]
+    branches: [ "main" ] # remplacer par main 
     
   pull_request:
     branches: 
@@ -12,47 +12,47 @@ jobs:
   mon-premier-job: # par exemple run test 
     runs-on: ubuntu-latest
     steps:
-      - name: afficher une variable 
+      - name: afficher une variable d environnement
         run: echo $NAME
-        env:
+        env: 
           NAME : marco
           
       - name: lister fichiers 
-        run: ls -la 
+        run: ls -la # on observe qu'il n'y a aucun fichier de notre répertoire dnas le répertoire courant ! 
         
       - name: cloner le répo
-        uses: actions/checkout@v4 # checkout repo
+        uses: actions/checkout@v4 # cela permet de cloner son répertoire et donc d'importer son code
         
-      - name: lister fichiers
-        run: ls -la
+      - name: lister fichiers 
+        run: ls -la # on reliste et on observe que les fichiers sont bien présents à cette étape
         
       - name: Utiliser une variable au niveau du répo
-        run: echo ${{vars.NAME}}
+        run: echo ${{vars.NAME}} # Il est possible de placer des variables au niveau de répertoire github et de les référencer dnas un workflow 
         
-      - name: Utiliser un secret 
-        run: echo $MY_PASSWORD > example.txt
+      - name: Utiliser un secret # Idem pour des secrets
+        run: echo $MY_PASSWORD > example.txt 
         env: 
           MY_PASSWORD: ${{secrets.PASSWORD}}
           
-      - name: Afficher contenu du fichier
+      - name: Afficher contenu du fichier # Toute information concernant un secret ne peut pas être "affichée" 
         run: cat example.txt
         
-  test: # par exemple  : second-job
+  test: # second-job
     runs-on: ubuntu-latest
     needs: mon-premier-job # cette étape de test ne peut pas se lancer avant que mon-premier-job soit fini et réussi ! 
     steps:
       - name: lister fichiers # les fichiers présents auparavant sont-ils disponibles ? 
         run: ls -la
         
-      - name: cloner le répo
+      - name: cloner le répo # on reclone 
         uses: actions/checkout@v4
         
-      - name: installer python 
+      - name: installer python  # installation de python 
         uses: actions/setup-python@v5
         with:
           python-version: 3.11
           
-      - name:  montrer la version de python installée
+      - name:  montrer la version de python installée # on peut vérifier ici l'installation de celui-ci 
         run: python --version
 
       - name: installer les dépendances
