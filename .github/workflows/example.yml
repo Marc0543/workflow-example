@@ -1,0 +1,22 @@
+name: Tester et déployer
+
+on:
+  push:
+    branches: [ "main" ]
+    
+  pull_request:
+    branches: 
+      -"main" 
+
+jobs:
+  mon-premier-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: lister fichiers
+        run: ls -la
+        
+      - name: cloner le répo
+        uses: actions/checkout@v4 # checkout repo
+        
+      - name: lister fichiers
+        run: ls -la
