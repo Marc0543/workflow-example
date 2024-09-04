@@ -2,11 +2,11 @@ name: Tester et déployer
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "random_name" ]
     
   pull_request:
     branches: 
-      -"main" 
+      -"prod" 
 
 jobs:
   mon-premier-job: # par exemple run test 
@@ -39,14 +39,15 @@ jobs:
         
   test: # par exemple  : second-job
     runs-on: ubuntu-latest
+    needs: mon-premier-job # cette étape de test ne peut pas se lancer avant que mon-premier-job soit fini et réussi ! 
     steps:
-      - name: lister fichiers
+      - name: lister fichiers # les fichiers présents auparavant sont-ils disponibles ? 
         run: ls -la
         
       - name: cloner le répo
         uses: actions/checkout@v4
         
-      - name: installer python
+      - name: installer python 
         uses: actions/setup-python@v5
         with:
           python-version: 3.11
